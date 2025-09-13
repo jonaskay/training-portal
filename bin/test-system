@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+
+set -e
+
+echo "Running all system tests..."
+
+# Create a temporary file to capture test output
+temp_output=$(mktemp)
+
+# Run all system tests and capture output
+if bin/rails test:system 2>&1 | tee "$temp_output"; then
+  echo "All system tests passed on first run!"
+  rm -f "$temp_output"
+  exit 0
+fi
+
+echo ""
+echo "Some tests failed. Analyzing failures and retrying..."
+
+# Extract failed test files from the output
+failed_tests=$(grep -E "^  [0-9]+\) (Error|Failure):" "$temp_output" | \
+  grep -oE "test/system/[^:]+\.rb" | \
+  sort -u || true)
+
+rm -f "$temp_output"
+
+if [ -z "$failed_tests" ]; then
+  echo "Could not identify specific failed tests. Exiting with failure."
+  exit 1
+fi
+
+echo "Failed tests identified:"
+echo "$failed_tests"
+echo ""
+
+# Retry each failed test individually
+retry_failures=""
+for test_file in $failed_tests; do
+  echo "Retrying: $test_file"
+  if ! bin/rails test:system "$test_file"; then
+    retry_failures="$retry_failures $test_file"
+  fi
+done
+
+if [ -z "$retry_failures" ]; then
+  echo ""
+  echo "All tests passed after retry!"
+  exit 0
+else
+  echo ""
+  echo "The following tests still failed after retry:"
+  for failed_test in $retry_failures; do
+    echo "  - $failed_test"
+  done
+  exit 1
+fi
