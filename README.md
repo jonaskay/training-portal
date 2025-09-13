@@ -1,24 +1,26 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
 
-Things you may want to cover:
 
-* Ruby version
 
-* System dependencies
+## System dependencies
+- Ruby 3.4.5
 
-* Configuration
+- ChromeDriver (compatible with your Chrome browser version)
 
-* Database creation
+## Configuration
 
-* Database initialization
+## Database creation
 
-* How to run the test suite
+## Database initialization
 
-* Services (job queues, cache servers, search engines, etc.)
+## Testing
 
-* Deployment instructions
+To run all system tests:
+```bash
+bin/rails test:system
+```
 
-* ...
+## Services (job queues, cache servers, search engines, etc.)
+
+## Deployment instructions
