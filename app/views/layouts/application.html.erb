@@ -23,7 +23,19 @@
   </head>
 
   <body>
-    <main class="container mx-auto mt-28 px-5 flex">
+    <nav class="bg-gray-800 text-white p-4">
+      <div class="container mx-auto flex justify-between items-center">
+        <h1 class="text-xl font-bold">Training Portal</h1>
+        <div>
+          <% if authenticated? %>
+            <%= button_to "Sign Out", session_path, method: :delete, class: "bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded" %>
+          <% else %>
+            <%= link_to "Sign In", new_session_path, class: "bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded" %>
+          <% end %>
+        </div>
+      </div>
+    </nav>
+    <main class="container mx-auto mt-8 px-5 flex">
       <%= yield %>
     </main>
   </body>
