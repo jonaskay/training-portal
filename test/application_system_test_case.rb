@@ -1,7 +1,7 @@
 require "test_helper"
-require_relative "support/authentication_test_helper"
-require_relative "support/jobs_test_helper"
-require_relative "support/pages_test_helper"
+require_relative "test_helper/authentication_test_helper"
+require_relative "test_helper/jobs_test_helper"
+require_relative "test_helper/pages_test_helper"
 
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   include AuthenticationTestHelper
